@@ -1,11 +1,12 @@
 import express, { Request, Response } from 'express';
+import { setupToDoController } from './todo/todo-controller';
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 
-app.get('/api/hello', (req: Request, res: Response) => {
-  res.json({ message: 'Hello from the server!' });
-});
+app.use(express.json()); // <-- enables parsing application/json bodies
+
+setupToDoController(app);
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
