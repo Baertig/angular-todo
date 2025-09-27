@@ -1,8 +1,10 @@
+export type ToDoState = "Pending" | "Completed";
+
 export interface ToDo {
     id: number;
     title: string;
     description: string;
-    done: boolean;
+    state: ToDoState;
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;
@@ -14,7 +16,7 @@ export class ToDo implements ToDo {
     id: number;
     title: string;
     description: string;
-    done: boolean;
+    state: ToDoState;
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;
@@ -22,7 +24,7 @@ export class ToDo implements ToDo {
     constructor(title: string) {
         this.id = NEXT_ID++;
         this.title = title;
-        this.done = false;
+        this.state = "Pending";
         this.description = "";
         this.createdAt = new Date();
         this.updatedAt = new Date();

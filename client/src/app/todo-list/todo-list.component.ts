@@ -14,7 +14,7 @@ import { ToDo } from '../types/todo';
 
         @for (todo of todos(); track $index) {
             <div class="todo-item">
-              <input type="checkbox" [checked]="todo.done" />
+              <input type="checkbox" [checked]="todo.state === 'Completed'" />
 
               <div class="todo-content">
                 <h3>{{ todo.title }}</h3>
@@ -120,7 +120,7 @@ export class TodoListComponent {
       id: 1,
       title: 'Learn Angular Signals',
       description: 'Study the new Angular signals API and implement it in the todo app',
-      done: false,
+      state: 'Pending',
       createdAt: new Date('2025-09-25'),
       updatedAt: new Date('2025-09-25'),
       deletedAt: null
@@ -129,7 +129,7 @@ export class TodoListComponent {
       id: 2,
       title: 'Grocery Shopping',
       description: 'Buy milk, bread, eggs, and vegetables for the week',
-      done: true,
+      state: 'Completed',
       createdAt: new Date('2025-09-24'),
       updatedAt: new Date('2025-09-26'),
       deletedAt: null
@@ -138,7 +138,7 @@ export class TodoListComponent {
       id: 3,
       title: 'Write Unit Tests',
       description: 'Create comprehensive unit tests for the todo service and components',
-      done: false,
+      state: 'Pending',
       createdAt: new Date('2025-09-26'),
       updatedAt: new Date('2025-09-26'),
       deletedAt: null
@@ -147,7 +147,7 @@ export class TodoListComponent {
       id: 4,
       title: 'Plan Weekend Trip',
       description: 'Research destinations, book accommodation, and create itinerary',
-      done: false,
+      state: 'Pending',
       createdAt: new Date('2025-09-23'),
       updatedAt: new Date('2025-09-27'),
       deletedAt: null
@@ -156,7 +156,7 @@ export class TodoListComponent {
       id: 5,
       title: 'Review Code',
       description: 'Review pull requests from team members and provide feedback',
-      done: true,
+      state: 'Completed',
       createdAt: new Date('2025-09-22'),
       updatedAt: new Date('2025-09-24'),
       deletedAt: null
@@ -177,7 +177,7 @@ export class TodoListComponent {
     id: newId,
     title,
     description: '',
-    done: false,
+    state: 'Pending',
     createdAt: now,
     updatedAt: now,
     deletedAt: null

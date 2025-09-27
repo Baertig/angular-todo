@@ -115,10 +115,6 @@ import { ToDo } from '../types/todo';
       font-size: 16px;
     }
 
-    .delete-button:hover {
-      background-color: #c82333;
-    }
-
     .back-button {
       padding: 12px 24px;
       background-color: #6c757d;
@@ -127,10 +123,6 @@ import { ToDo } from '../types/todo';
       border-radius: 4px;
       cursor: pointer;
       font-size: 16px;
-    }
-
-    .back-button:hover {
-      background-color: #5a6268;
     }
 
     h1 {
@@ -148,7 +140,7 @@ export class TodoDetailsComponent implements OnInit {
       id: 1,
       title: 'Learn Angular Signals',
       description: 'Study the new Angular signals API and implement it in the todo app',
-      done: false,
+      state: 'Pending',
       createdAt: new Date('2025-09-25'),
       updatedAt: new Date('2025-09-25'),
       deletedAt: null
@@ -157,7 +149,7 @@ export class TodoDetailsComponent implements OnInit {
       id: 2,
       title: 'Grocery Shopping',
       description: 'Buy milk, bread, eggs, and vegetables for the week',
-      done: true,
+      state: 'Completed',
       createdAt: new Date('2025-09-24'),
       updatedAt: new Date('2025-09-26'),
       deletedAt: null
@@ -166,8 +158,8 @@ export class TodoDetailsComponent implements OnInit {
       id: 3,
       title: 'Write Unit Tests',
       description: 'Create comprehensive unit tests for the todo service and components',
-      done: false,
-      createdAt: new Date('2025-09-26'),
+      state: 'Pending',
+      createdAt: new Date('2025-26'),
       updatedAt: new Date('2025-09-26'),
       deletedAt: null
     },
@@ -175,7 +167,7 @@ export class TodoDetailsComponent implements OnInit {
       id: 4,
       title: 'Plan Weekend Trip',
       description: 'Research destinations, book accommodation, and create itinerary',
-      done: false,
+      state: 'Pending',
       createdAt: new Date('2025-09-23'),
       updatedAt: new Date('2025-09-27'),
       deletedAt: null
@@ -184,7 +176,7 @@ export class TodoDetailsComponent implements OnInit {
       id: 5,
       title: 'Review Code',
       description: 'Review pull requests from team members and provide feedback',
-      done: true,
+      state: 'Completed',
       createdAt: new Date('2025-09-22'),
       updatedAt: new Date('2025-09-24'),
       deletedAt: null
@@ -206,7 +198,6 @@ export class TodoDetailsComponent implements OnInit {
 
   deleteTodo() {
     if (this.todo()) {
-      // For now, just navigate back - deletion logic can be implemented later
       this.goBack();
     }
   }

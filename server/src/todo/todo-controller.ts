@@ -1,5 +1,5 @@
 import {Express, RequestHandler, Request} from "express";
-import { ToDo } from "./todo-model";
+import { ToDo, ToDoState } from "./todo-model";
 
 const todos: ToDo[] = [];
 
@@ -9,7 +9,7 @@ interface CreateToDoPayload {
 }
 
 interface PatchToDoPayload extends CreateToDoPayload {
-    done?: boolean
+    state?: ToDoState
 }
 
 interface ParamId {
@@ -39,7 +39,7 @@ export function setupToDoController(app: Express) {
     })
 
     app.post("/api/v1/todos", (req, res) => {
-        const body = req.body as CreateToDoPayload; // raw JSON payload
+        const body = req.body as CreateToDoPayload;
         if (!body.title) {
             return res.status(400).json({ error: "title required" });
         }
@@ -59,7 +59,7 @@ export function setupToDoController(app: Express) {
     let mutated = false;
     if (body.title !== undefined) { todo.title = body.title; mutated = true; }
     if (body.description !== undefined) { todo.description = body.description; mutated = true; }
-    if (body.done !== undefined) { todo.done = body.done; mutated = true; }
+    if (body.state !== undefined) { todo.state = body.state; mutated = true; }
     if (mutated) todo.updatedAt = new Date();
 
         res.json(todo);
