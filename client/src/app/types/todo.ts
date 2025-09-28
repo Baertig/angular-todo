@@ -5,7 +5,6 @@ export interface ToDo {
     state: ToDoState
     createdAt: Date;
     updatedAt: Date;
-    deletedAt: Date | null;
 }
 
 export type ToDoState = "Pending" | "Completed"

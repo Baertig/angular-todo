@@ -7,5 +7,4 @@ export const todos = pgTable("todos", {
   state: varchar({ enum: ["Pending", "Completed"] }).notNull(),
   createdAt: timestamp().notNull(),
   updatedAt: timestamp().notNull(),
-  deletedAt: timestamp(),
 });

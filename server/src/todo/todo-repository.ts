@@ -1,13 +1,13 @@
 import { ToDo, ToDoState } from "./todo-model";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
-import { eq, isNull, isNotNull } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import assert from "assert";
 
 import * as schema from "../db/schema";
 import { omitUndefined } from "../common/object";
 
 export interface ToDoRepository {
-  fetchToDos({ active }: { active: boolean }): Promise<ToDo[]>;
+  fetchToDos(): Promise<ToDo[]>;
 
   findToDo({ toDoId }: { toDoId: number }): Promise<ToDo | null>;
 
@@ -16,13 +16,11 @@ export interface ToDoRepository {
     title,
     description,
     state,
-    deletedAt,
   }: {
     toDoId: number;
     title?: string;
     description?: string;
     state?: ToDoState;
-    deletedAt?: Date;
   }): Promise<ToDo | null>;
 
   createToDo({
@@ -32,17 +30,15 @@ export interface ToDoRepository {
     title: string;
     description?: string;
   }): Promise<ToDo>;
+
+  deleteToDo({ toDoId }: { toDoId: number }): Promise<boolean>;
 }
 
 export const setupToDoRepository = (
   db: PostgresJsDatabase<typeof schema>
 ): ToDoRepository => ({
-  async fetchToDos({ active }) {
-    const activeFilter = active
-      ? isNull(schema.todos.deletedAt)
-      : isNotNull(schema.todos.deletedAt);
-
-    return await db.select().from(schema.todos).where(activeFilter);
+  async fetchToDos() {
+    return await db.select().from(schema.todos);
   },
 
   async findToDo({ toDoId }) {
@@ -55,8 +51,8 @@ export const setupToDoRepository = (
     return result.length === 0 ? null : result[0];
   },
 
-  async updateToDo({ toDoId, title, description, state, deletedAt }) {
-    const updates = omitUndefined({ title, description, state, deletedAt });
+  async updateToDo({ toDoId, title, description, state }) {
+    const updates = omitUndefined({ title, description, state });
 
     if (Object.keys(updates).length === 0) {
       return null;
@@ -93,5 +89,14 @@ export const setupToDoRepository = (
     assert(result.length === 1, "Expected exactly one inserted record");
 
     return result[0];
+  },
+
+  async deleteToDo({ toDoId }) {
+    const result = await db
+      .delete(schema.todos)
+      .where(eq(schema.todos.id, toDoId))
+      .returning();
+
+    return result.length > 0;
   },
 });

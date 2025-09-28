@@ -41,7 +41,7 @@ export const selectDeletingTodoLoading = createSelector(
 
 export const selectActiveTodos = createSelector(
   selectTodos,
-  (todos) => todos.filter(todo => !todo.deletedAt)
+  (todos) => todos
 );
 
 export const selectTodoById = (todoId: number) => createSelector(

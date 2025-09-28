@@ -7,5 +7,4 @@ export interface ToDo {
   state: ToDoState;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date | null;
 }

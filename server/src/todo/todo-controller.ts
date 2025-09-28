@@ -20,7 +20,7 @@ type RequestWithToDo = Request<ParamId> & { todo: ToDo };
 export function setupToDoController(app: Express, repo: ToDoRepository) {
   app.get("/api/v1/todos", async (req, res) => {
     try {
-      const todos = await repo.fetchToDos({ active: true });
+      const todos = await repo.fetchToDos();
       res.json(todos);
     } catch (error) {
       console.error('Error fetching todos:', error);
@@ -103,16 +103,13 @@ export function setupToDoController(app: Express, repo: ToDoRepository) {
         return res.status(400).json({ error: "Invalid ID format" });
       }
       
-      const deletedTodo = await repo.updateToDo({
-        toDoId,
-        deletedAt: new Date()
-      });
+      const deleted = await repo.deleteToDo({ toDoId });
 
-      if (!deletedTodo) {
+      if (!deleted) {
         return res.status(404).json({ error: "Todo not found" });
       }
 
-      res.status(200).json(deletedTodo);
+      res.status(204).send();
     } catch (error) {
       console.error('Error deleting todo:', error);
       res.status(500).json({ error: "Internal server error" });
