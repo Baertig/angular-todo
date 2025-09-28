@@ -1,18 +1,31 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { ToDo } from '../types/todo';
+import { TodosActions } from '../state/todos.actions';
+import { selectActiveTodos, selectTodosLoadingState, selectTodosError } from '../state/todos.selectors';
 
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   template: `
     <main class="main">
         <h1>Todo List</h1>
         <div class="todo-list">
 
-        @for (todo of todos(); track $index) {
+        @if (loading$ | async) {
+          <div>Loading todos...</div>
+        }
+        
+        @if (error$ | async; as error) {
+          <div class="error">Error: {{ error }}</div>
+        }
+
+        @for (todo of todos$ | async; track todo.id) {
             <div class="todo-item">
               <input type="checkbox" [checked]="todo.state === 'Completed'" />
 
@@ -107,61 +120,39 @@ import { ToDo } from '../types/todo';
       border-radius: 4px;
       cursor: pointer;
     }
+
+    .error {
+      color: red;
+      margin-bottom: 1rem;
+      padding: 8px;
+      background-color: #ffe6e6;
+      border: 1px solid #ff9999;
+      border-radius: 4px;
+    }
   `
 })
-export class TodoListComponent {
+export class TodoListComponent implements OnInit {
   showAddForm = signal(false);
   newTodoTitle = '';
+  
+  todos$: Observable<ToDo[]>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private store: Store
+  ) {
+    this.todos$ = this.store.select(selectActiveTodos);
+    this.loading$ = this.store.select(selectTodosLoadingState);
+    this.error$ = this.store.select(selectTodosError);
+  }
+  
+  ngOnInit() {
+    this.store.dispatch(TodosActions.loadTodos());
+  }
 
-  todos = signal<ToDo[]>([
-    {
-      id: 1,
-      title: 'Learn Angular Signals',
-      description: 'Study the new Angular signals API and implement it in the todo app',
-      state: 'Pending',
-      createdAt: new Date('2025-09-25'),
-      updatedAt: new Date('2025-09-25'),
-      deletedAt: null
-    },
-    {
-      id: 2,
-      title: 'Grocery Shopping',
-      description: 'Buy milk, bread, eggs, and vegetables for the week',
-      state: 'Completed',
-      createdAt: new Date('2025-09-24'),
-      updatedAt: new Date('2025-09-26'),
-      deletedAt: null
-    },
-    {
-      id: 3,
-      title: 'Write Unit Tests',
-      description: 'Create comprehensive unit tests for the todo service and components',
-      state: 'Pending',
-      createdAt: new Date('2025-09-26'),
-      updatedAt: new Date('2025-09-26'),
-      deletedAt: null
-    },
-    {
-      id: 4,
-      title: 'Plan Weekend Trip',
-      description: 'Research destinations, book accommodation, and create itinerary',
-      state: 'Pending',
-      createdAt: new Date('2025-09-23'),
-      updatedAt: new Date('2025-09-27'),
-      deletedAt: null
-    },
-    {
-      id: 5,
-      title: 'Review Code',
-      description: 'Review pull requests from team members and provide feedback',
-      state: 'Completed',
-      createdAt: new Date('2025-09-22'),
-      updatedAt: new Date('2025-09-24'),
-      deletedAt: null
-    }
-  ])
+
 
   createTodo() {
     const title = this.newTodoTitle.trim();
@@ -170,20 +161,7 @@ export class TodoListComponent {
         return;
     }
 
-    const newId = Math.max(...this.todos().map(t => t.id)) + 1;
-    const now = new Date();
-    
-    const newTodo: ToDo = {
-    id: newId,
-    title,
-    description: '',
-    state: 'Pending',
-    createdAt: now,
-    updatedAt: now,
-    deletedAt: null
-    };
-    
-    this.todos.update(todos => [...todos, newTodo]);
+    this.store.dispatch(TodosActions.addToDo({ title }));
     this.newTodoTitle = '';
     this.showAddForm.set(false);
   }
