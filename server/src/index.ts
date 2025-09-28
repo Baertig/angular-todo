@@ -1,7 +1,21 @@
-import { createApp } from './app';
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/node-postgres";
+import * as schema from "./db/schema";
+import { todos } from "./db/schema";
+
+import { createApp } from "./app";
 
 const port = Number(process.env.PORT) || 3000;
-const app = createApp();
+
+const db = drizzle({
+  schema,
+  connection: {
+    connectionString: process.env.DATABASE_URL!,
+    password: process.env.DATABASE_PASSWORD!,
+  },
+});
+
+const app = createApp(db);
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
