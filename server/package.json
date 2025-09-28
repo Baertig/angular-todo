@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "preview": "node dist/index.js"
+    "serve": "node dist/index.js",
+    "migrate": "drizzle-kit push"
   },
   "keywords": [],
   "author": "",

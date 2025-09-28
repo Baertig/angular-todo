@@ -1,7 +1,6 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "./db/schema";
-import { todos } from "./db/schema";
 
 import { createApp } from "./app";
 
