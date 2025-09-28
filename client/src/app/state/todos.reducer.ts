@@ -24,5 +24,64 @@ export const todosReducer = createReducer(
     loading: { ...state.loading, todos: false },
     error
   })),
+
+  // Add Todo
+  on(TodosActions.addToDo, (state) => ({
+    ...state,
+    loading: { ...state.loading, adding: true },
+    error: null
+  })),
+  
+  on(TodosActions.addToDoSuccess, (state, { todo }) => ({
+    ...state,
+    todos: [...state.todos, todo],
+    loading: { ...state.loading, adding: false },
+    error: null
+  })),
+  
+  on(TodosActions.addToDoFailure, (state, { error }) => ({
+    ...state,
+    loading: { ...state.loading, adding: false },
+    error
+  })),
+
+  // Update Todo
+  on(TodosActions.updateToDo, (state) => ({
+    ...state,
+    loading: { ...state.loading, updating: true },
+    error: null
+  })),
+  
+  on(TodosActions.updateToDoSuccess, (state, { todo }) => ({
+    ...state,
+    todos: state.todos.map(t => t.id === todo.id ? todo : t),
+    loading: { ...state.loading, updating: false },
+    error: null
+  })),
+  
+  on(TodosActions.updateToDoFailure, (state, { error }) => ({
+    ...state,
+    loading: { ...state.loading, updating: false },
+    error
+  })),
+
+  on(TodosActions.deleteToDo, (state) => ({
+    ...state,
+    loading: { ...state.loading, deleting: true },
+    error: null
+  })),
+  
+  on(TodosActions.deleteToDoSuccess, (state, { todo }) => ({
+    ...state,
+    todos: state.todos.filter(t => t.id !== todo.id),
+    loading: { ...state.loading, deleting: false },
+    error: null
+  })),
+  
+  on(TodosActions.deleteToDoFailure, (state, { error }) => ({
+    ...state,
+    loading: { ...state.loading, deleting: false },
+    error
+  })),
   
 )

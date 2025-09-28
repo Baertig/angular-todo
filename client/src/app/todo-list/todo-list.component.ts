@@ -27,7 +27,9 @@ import { selectActiveTodos, selectTodosLoadingState, selectTodosError } from '..
 
         @for (todo of todos$ | async; track todo.id) {
             <div class="todo-item">
-              <input type="checkbox" [checked]="todo.state === 'Completed'" />
+              <input type="checkbox" 
+                     [checked]="todo.state === 'Completed'" 
+                     (change)="toggleTodoState(todo)" />
 
               <div class="todo-content">
                 <h3>{{ todo.title }}</h3>
@@ -164,6 +166,14 @@ export class TodoListComponent implements OnInit {
     this.store.dispatch(TodosActions.addToDo({ title }));
     this.newTodoTitle = '';
     this.showAddForm.set(false);
+  }
+
+  toggleTodoState(todo: ToDo) {
+    const newState = todo.state === 'Completed' ? 'Pending' : 'Completed';
+    this.store.dispatch(TodosActions.updateToDo({ 
+      todoId: todo.id, 
+      updates: { state: newState } 
+    }));
   }
 
   goToDetails(id: number) {

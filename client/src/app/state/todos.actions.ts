@@ -7,5 +7,17 @@ export const TodosActions = createActionGroup({
     'Load Todos': emptyProps(),
     'Load Todos Success': props<{ todos: ToDo[] }>(),
     'Load Todos Failure': props<{ error: string }>(),
+
+    'Add ToDo': props<{ title: string }>(),
+    'Add ToDo Success': props<{ todo: ToDo }>(),
+    'Add ToDo Failure': props<{ error: string }>(),
+
+    'Update ToDo': props<{todoId: number, updates: Partial<Pick<ToDo, 'title' | 'description' | 'state'>>}> (),
+    'Update ToDo Success': props<{ todo: ToDo }> (),
+    'Update ToDo Failure': props<{ error: string }> (),
+
+    'Delete ToDo': props<{ todoId: number }>(),
+    'Delete ToDo Success': props<{ todo: ToDo }>(),
+    'Delete ToDo Failure': props<{ error: string }>(),
   },
 });

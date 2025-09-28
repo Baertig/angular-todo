@@ -25,4 +25,46 @@ export class TodosEffects {
       )
     )
   );
+
+  addTodo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TodosActions.addToDo),
+      switchMap(({ title }) =>
+        this.http.post<ToDo>('/todos', { title }).pipe(
+          map(todo => TodosActions.addToDoSuccess({ todo })),
+          catchError(error => of(TodosActions.addToDoFailure({ 
+            error: error.message || 'Failed to add todo' 
+          })))
+        )
+      )
+    )
+  );
+
+  updateTodo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TodosActions.updateToDo),
+      switchMap(({ todoId, updates }) =>
+        this.http.patch<ToDo>(`/todos/${todoId}`, updates).pipe(
+          map(todo => TodosActions.updateToDoSuccess({ todo })),
+          catchError(error => of(TodosActions.updateToDoFailure({ 
+            error: error.message || 'Failed to update todo' 
+          })))
+        )
+      )
+    )
+  );
+
+  deleteTodo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TodosActions.deleteToDo),
+      switchMap(({ todoId }) =>
+        this.http.delete<ToDo>(`/todos/${todoId}`).pipe(
+          map(todo => TodosActions.deleteToDoSuccess({ todo })),
+          catchError(error => of(TodosActions.deleteToDoFailure({ 
+            error: error.message || 'Failed to delete todo' 
+          })))
+        )
+      )
+    )
+  );
 }

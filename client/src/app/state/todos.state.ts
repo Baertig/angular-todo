@@ -5,8 +5,9 @@ export interface TodosState {
   error: string | null;
   loading: {
     todos: boolean;
-    create: boolean;
-    update: boolean;
+    adding: boolean;
+    updating: boolean;
+    deleting: boolean;
   };
 }
 
@@ -15,7 +16,8 @@ export const initialTodosState: TodosState = {
   error: null,
   loading: {
     todos: false,
-    create: false,
-    update: false
+    adding: false,
+    updating: false,
+    deleting: false
   }
 };

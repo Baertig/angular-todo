@@ -24,14 +24,19 @@ export const selectTodosLoadingState = createSelector(
   (loading) => loading.todos
 );
 
-export const selectCreateTodoLoading = createSelector(
+export const selectAddingTodoLoading = createSelector(
   selectTodosLoading,
-  (loading) => loading.create
+  (loading) => loading.adding
 );
 
-export const selectUpdateTodoLoading = createSelector(
+export const selectUpdatingTodoLoading = createSelector(
   selectTodosLoading,
-  (loading) => loading.update
+  (loading) => loading.updating
+);
+
+export const selectDeletingTodoLoading = createSelector(
+  selectTodosLoading,
+  (loading) => loading.deleting
 );
 
 export const selectActiveTodos = createSelector(
