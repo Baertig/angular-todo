@@ -71,9 +71,9 @@ export const todosReducer = createReducer(
     error: null
   })),
   
-  on(TodosActions.deleteToDoSuccess, (state, { todo }) => ({
+  on(TodosActions.deleteToDoSuccess, (state, { todoId }) => ({
     ...state,
-    todos: state.todos.filter(t => t.id !== todo.id),
+    todos: state.todos.filter(t => t.id !== todoId),
     loading: { ...state.loading, deleting: false },
     error: null
   })),

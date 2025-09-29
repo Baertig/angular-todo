@@ -12,12 +12,15 @@ export const TodosActions = createActionGroup({
     'Add ToDo Success': props<{ todo: ToDo }>(),
     'Add ToDo Failure': props<{ error: string }>(),
 
-    'Update ToDo': props<{todoId: number, updates: Partial<Pick<ToDo, 'title' | 'description' | 'state'>>}> (),
-    'Update ToDo Success': props<{ todo: ToDo }> (),
-    'Update ToDo Failure': props<{ error: string }> (),
+    'Update ToDo': props<{
+      todoId: number;
+      updates: Partial<Pick<ToDo, 'title' | 'description' | 'state'>>;
+    }>(),
+    'Update ToDo Success': props<{ todo: ToDo }>(),
+    'Update ToDo Failure': props<{ error: string }>(),
 
     'Delete ToDo': props<{ todoId: number }>(),
-    'Delete ToDo Success': props<{ todo: ToDo }>(),
+    'Delete ToDo Success': props<{ todoId: number }>(),
     'Delete ToDo Failure': props<{ error: string }>(),
   },
 });

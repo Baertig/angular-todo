@@ -59,7 +59,7 @@ export class TodosEffects {
       ofType(TodosActions.deleteToDo),
       switchMap(({ todoId }) =>
         this.http.delete<ToDo>(`/todos/${todoId}`).pipe(
-          map(todo => TodosActions.deleteToDoSuccess({ todo })),
+          map(() => TodosActions.deleteToDoSuccess({ todoId })),
           catchError(error => of(TodosActions.deleteToDoFailure({ 
             error: error.message || 'Failed to delete todo' 
           })))
