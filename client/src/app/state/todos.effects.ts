@@ -7,6 +7,21 @@ import { map, catchError, switchMap } from 'rxjs/operators';
 import { TodosActions } from './todos.actions';
 import { ToDo } from '../types/todo';
 
+interface ToDoRaw {
+  id: number;
+  title: string;
+  description: string;
+  state: 'Pending' | 'Completed';
+  createdAt: string;
+  updatedAt: string;
+}
+
+const transformToDo = (raw: ToDoRaw): ToDo => ({
+  ...raw,
+  createdAt: new Date(raw.createdAt),
+  updatedAt: new Date(raw.updatedAt),
+});
+
 @Injectable()
 export class TodosEffects {
   private actions$ = inject(Actions);
@@ -16,11 +31,16 @@ export class TodosEffects {
     this.actions$.pipe(
       ofType(TodosActions.loadTodos),
       switchMap(() =>
-        this.http.get<ToDo[]>('/todos').pipe(
-          map(todos => TodosActions.loadTodosSuccess({ todos })),
-          catchError(error => of(TodosActions.loadTodosFailure({ 
-            error: error.message || 'Failed to load todos' 
-          })))
+        this.http.get<ToDoRaw[]>('/todos').pipe(
+          map((rawTodos) => rawTodos.map(transformToDo)),
+          map((todos) => TodosActions.loadTodosSuccess({ todos })),
+          catchError((error) =>
+            of(
+              TodosActions.loadTodosFailure({
+                error: error.message || 'Failed to load todos',
+              })
+            )
+          )
         )
       )
     )
@@ -30,11 +50,16 @@ export class TodosEffects {
     this.actions$.pipe(
       ofType(TodosActions.loadTodoById),
       switchMap(({ todoId }) =>
-        this.http.get<ToDo>(`/todos/${todoId}`).pipe(
-          map(todo => TodosActions.loadTodoByIdSuccess({ todo })),
-          catchError(error => of(TodosActions.loadTodoByIdFailure({ 
-            error: error.message || 'Failed to load todo' 
-          })))
+        this.http.get<ToDoRaw>(`/todos/${todoId}`).pipe(
+          map(transformToDo),
+          map((todo) => TodosActions.loadTodoByIdSuccess({ todo })),
+          catchError((error) =>
+            of(
+              TodosActions.loadTodoByIdFailure({
+                error: error.message || 'Failed to load todo',
+              })
+            )
+          )
         )
       )
     )
@@ -44,11 +69,16 @@ export class TodosEffects {
     this.actions$.pipe(
       ofType(TodosActions.addToDo),
       switchMap(({ title }) =>
-        this.http.post<ToDo>('/todos', { title }).pipe(
-          map(todo => TodosActions.addToDoSuccess({ todo })),
-          catchError(error => of(TodosActions.addToDoFailure({ 
-            error: error.message || 'Failed to add todo' 
-          })))
+        this.http.post<ToDoRaw>('/todos', { title }).pipe(
+          map(transformToDo),
+          map((todo) => TodosActions.addToDoSuccess({ todo })),
+          catchError((error) =>
+            of(
+              TodosActions.addToDoFailure({
+                error: error.message || 'Failed to add todo',
+              })
+            )
+          )
         )
       )
     )
@@ -58,11 +88,16 @@ export class TodosEffects {
     this.actions$.pipe(
       ofType(TodosActions.updateToDo),
       switchMap(({ todoId, updates }) =>
-        this.http.patch<ToDo>(`/todos/${todoId}`, updates).pipe(
-          map(todo => TodosActions.updateToDoSuccess({ todo })),
-          catchError(error => of(TodosActions.updateToDoFailure({ 
-            error: error.message || 'Failed to update todo' 
-          })))
+        this.http.patch<ToDoRaw>(`/todos/${todoId}`, updates).pipe(
+          map(transformToDo),
+          map((todo) => TodosActions.updateToDoSuccess({ todo })),
+          catchError((error) =>
+            of(
+              TodosActions.updateToDoFailure({
+                error: error.message || 'Failed to update todo',
+              })
+            )
+          )
         )
       )
     )
@@ -74,9 +109,13 @@ export class TodosEffects {
       switchMap(({ todoId }) =>
         this.http.delete<ToDo>(`/todos/${todoId}`).pipe(
           map(() => TodosActions.deleteToDoSuccess({ todoId })),
-          catchError(error => of(TodosActions.deleteToDoFailure({ 
-            error: error.message || 'Failed to delete todo' 
-          })))
+          catchError((error) =>
+            of(
+              TodosActions.deleteToDoFailure({
+                error: error.message || 'Failed to delete todo',
+              })
+            )
+          )
         )
       )
     )

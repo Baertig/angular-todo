@@ -39,11 +39,6 @@ export const selectDeletingTodoLoading = createSelector(
   (loading) => loading.deleting
 );
 
-export const selectActiveTodos = createSelector(
-  selectTodos,
-  (todos) => todos
-);
-
 export const selectTodoById = (todoId: number) => createSelector(
   selectTodos,
   (todos) => todos.find(todo => todo.id === todoId)

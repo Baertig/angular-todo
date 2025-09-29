@@ -2,11 +2,11 @@ import { Component, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ToDo } from '../types/todo';
 import { TodosActions } from '../state/todos.actions';
-import { selectActiveTodos, selectTodosLoadingState, selectTodosError } from '../state/todos.selectors';
+import { selectTodos, selectTodosLoadingState, selectTodosError } from '../state/todos.selectors';
 
 @Component({
   selector: 'app-todo-list',
@@ -71,7 +71,11 @@ export class TodoListComponent implements OnInit {
   error$: Observable<string | null>;
 
   constructor(private router: Router, private store: Store) {
-    this.todos$ = this.store.select(selectActiveTodos);
+    this.todos$ = this.store
+      .select(selectTodos)
+      .pipe(
+        map((todos) => [...todos].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()))
+      );
     this.loading$ = this.store.select(selectTodosLoadingState);
     this.error$ = this.store.select(selectTodosError);
   }
