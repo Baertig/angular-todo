@@ -14,8 +14,9 @@ import { selectActiveTodos, selectTodosLoadingState, selectTodosError } from '..
   imports: [FormsModule, CommonModule],
   template: `
     <main class="main">
-        <h1>Todo List</h1>
-        <div class="todo-list">
+      <h1>Todo List</h1>
+
+      <div class="todo-list">
 
         @if (loading$ | async) {
           <div>Loading todos...</div>
@@ -58,109 +59,32 @@ import { selectActiveTodos, selectTodosLoadingState, selectTodosError } from '..
 
       </div>
     </main>
-`,
-  styles: `
-    main {
-      width: 100%;
-      min-height: 100%;
-      padding: 1rem;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .todo-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .todo-item {
-      display: flex;
-      gap: 8px;
-    }
-
-    .todo-content { 
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .todo-content h3 {
-      margin: 0;
-    }
-
-    .add-button {
-      padding: 8px 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .add-form {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .add-form input {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      flex: 1;
-    }
-
-    .add-form button {
-      padding: 8px 16px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .error {
-      color: red;
-      margin-bottom: 1rem;
-      padding: 8px;
-      background-color: #ffe6e6;
-      border: 1px solid #ff9999;
-      border-radius: 4px;
-    }
-  `
+  `,
+  styleUrls: ['./todo-list.component.css'],
 })
 export class TodoListComponent implements OnInit {
   showAddForm = signal(false);
   newTodoTitle = '';
-  
+
   todos$: Observable<ToDo[]>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
 
-  constructor(
-    private router: Router,
-    private store: Store
-  ) {
+  constructor(private router: Router, private store: Store) {
     this.todos$ = this.store.select(selectActiveTodos);
     this.loading$ = this.store.select(selectTodosLoadingState);
     this.error$ = this.store.select(selectTodosError);
   }
-  
+
   ngOnInit() {
     this.store.dispatch(TodosActions.loadTodos());
   }
-
-
 
   createTodo() {
     const title = this.newTodoTitle.trim();
 
     if (!title) {
-        return;
+      return;
     }
 
     this.store.dispatch(TodosActions.addToDo({ title }));
@@ -170,10 +94,12 @@ export class TodoListComponent implements OnInit {
 
   toggleTodoState(todo: ToDo) {
     const newState = todo.state === 'Completed' ? 'Pending' : 'Completed';
-    this.store.dispatch(TodosActions.updateToDo({ 
-      todoId: todo.id, 
-      updates: { state: newState } 
-    }));
+    this.store.dispatch(
+      TodosActions.updateToDo({
+        todoId: todo.id,
+        updates: { state: newState },
+      })
+    );
   }
 
   goToDetails(id: number) {

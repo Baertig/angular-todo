@@ -35,7 +35,7 @@ import { selectTodoById } from '../state/todos.selectors';
 
         <div class="actions">
           <button class="delete-button" (click)="deleteTodo()">Delete</button>
-          <button class="update-button" (click)="updateTodo()">Update</button>
+          <button class="save-button" (click)="updateTodo()">Save</button>
           <button class="back-button" (click)="goBack()">Back to List</button>
         </div>
       </div>
@@ -47,100 +47,7 @@ import { selectTodoById } from '../state/todos.selectors';
       }
     </main>
   `,
-  styles: `
-    .main {
-      width: 100%;
-      min-height: 100vh;
-      padding: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .details-container {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .not-found {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-weight: bold;
-      font-size: 14px;
-      color: #333;
-    }
-
-    .title-input {
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-
-    .description-textarea {
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-      resize: vertical;
-      font-family: inherit;
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
-
-    .delete-button {
-      padding: 12px 24px;
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .update-button {
-      padding: 12px 24px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .back-button {
-      padding: 12px 24px;
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    h1 {
-      text-align: center;
-      margin: 0;
-    }
-  `,
+  styleUrls: ['./todo-details.component.css'],
 })
 export class TodoDetailsComponent implements OnInit {
   todo$: Observable<ToDo | undefined>;
