@@ -8,6 +8,10 @@ export const TodosActions = createActionGroup({
     'Load Todos Success': props<{ todos: ToDo[] }>(),
     'Load Todos Failure': props<{ error: string }>(),
 
+    'Load Todo By Id': props<{ todoId: number }>(),
+    'Load Todo By Id Success': props<{ todo: ToDo }>(),
+    'Load Todo By Id Failure': props<{ error: string }>(),
+
     'Add ToDo': props<{ title: string }>(),
     'Add ToDo Success': props<{ todo: ToDo }>(),
     'Add ToDo Failure': props<{ error: string }>(),

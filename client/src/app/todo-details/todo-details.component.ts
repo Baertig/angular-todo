@@ -163,7 +163,7 @@ export class TodoDetailsComponent implements OnInit {
       }
     });
 
-    this.store.dispatch(TodosActions.loadTodos());
+    this.store.dispatch(TodosActions.loadTodoById({ todoId: this.todoId }));
   }
 
   updateTodo() {

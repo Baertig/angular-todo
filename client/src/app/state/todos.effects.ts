@@ -26,6 +26,20 @@ export class TodosEffects {
     )
   );
 
+  loadTodoById$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TodosActions.loadTodoById),
+      switchMap(({ todoId }) =>
+        this.http.get<ToDo>(`/todos/${todoId}`).pipe(
+          map(todo => TodosActions.loadTodoByIdSuccess({ todo })),
+          catchError(error => of(TodosActions.loadTodoByIdFailure({ 
+            error: error.message || 'Failed to load todo' 
+          })))
+        )
+      )
+    )
+  );
+
   addTodo$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TodosActions.addToDo),

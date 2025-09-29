@@ -25,6 +25,33 @@ export const todosReducer = createReducer(
     error
   })),
 
+  // Load Todo By Id
+  on(TodosActions.loadTodoById, (state) => ({
+    ...state,
+    loading: { ...state.loading, todos: true },
+    error: null
+  })),
+  
+  on(TodosActions.loadTodoByIdSuccess, (state, { todo }) => {
+    const existingTodoIndex = state.todos.findIndex(t => t.id === todo.id);
+    const updatedTodos = existingTodoIndex >= 0 
+      ? state.todos.map(t => t.id === todo.id ? todo : t)
+      : [...state.todos, todo];
+    
+    return {
+      ...state,
+      todos: updatedTodos,
+      loading: { ...state.loading, todos: false },
+      error: null
+    };
+  }),
+  
+  on(TodosActions.loadTodoByIdFailure, (state, { error }) => ({
+    ...state,
+    loading: { ...state.loading, todos: false },
+    error
+  })),
+
   // Add Todo
   on(TodosActions.addToDo, (state) => ({
     ...state,

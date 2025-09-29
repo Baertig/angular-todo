@@ -18,6 +18,6 @@ export const initialTodosState: TodosState = {
     todos: false,
     adding: false,
     updating: false,
-    deleting: false
-  }
+    deleting: false,
+  },
 };
